@@ -3,7 +3,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore/lite";
 
-// Cấu hình Firebase
+// Ch Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyC2MZzF8MTJcTRp5GTObteCLlqvdUSLgeU",
   authDomain: "finalproject-9286d.firebaseapp.com",
@@ -13,7 +13,7 @@ const firebaseConfig = {
   appId: "1:81424004388:web:a955c8459933868d75efb1",
 };
 
-// Khởi tạo Firebase
+// Kta Firebase
 export const FIREBASE_APP = initializeApp(firebaseConfig);
 export const db = getFirestore(FIREBASE_APP);
 
