@@ -19,6 +19,7 @@ export default function MyTabs() {
           ),
         }}
       />
+
       <Tab.Screen
         name="User"
         component={UsersScreen}
