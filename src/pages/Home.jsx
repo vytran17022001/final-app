@@ -1,9 +1,18 @@
-import { React, useEffect, useState } from "react";
-import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import getData from "../helpers/getData";
+import Star from "react-native-vector-icons/FontAwesome";
 
 const HomeScreen = ({ navigation }) => {
   const [movies, setMovies] = useState([]);
+
   const fetchData = async () => {
     const data = await getData("movie");
     setMovies(data);
@@ -14,41 +23,97 @@ const HomeScreen = ({ navigation }) => {
   }, []);
 
   return (
-    <View>
-      {movies.length > 0 ? (
-        movies.map((d) => (
-          <TouchableOpacity
-            key={d.id}
-            onPress={() => navigation.navigate("MovieDetail", { id: d.id })}
-          >
-            <View key={d.id}>
-              <Image source={{ uri: d.movie_img }} style={styles.imgMovie} />
-              <Text>{d.movie_name}</Text>
-            </View>
-          </TouchableOpacity>
-        ))
-      ) : (
-        <Text>Loading...</Text>
-      )}
-    </View>
+    <ScrollView style={styles.container}>
+      {/* Movies Section */}
+      <View style={styles.moviesContainer}>
+        {movies.length > 0 ? (
+          movies.map((movie) => (
+            <TouchableOpacity
+              key={movie.id}
+              style={styles.movieCard}
+              onPress={() =>
+                navigation.navigate("MovieDetail", { id: movie.id })
+              }
+            >
+              <Image
+                source={{ uri: movie.movie_img }}
+                style={styles.imgMovie}
+              />
+              <Text style={styles.movieTitle}>{movie.movie_name}</Text>
+              <View style={styles.overlay}>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Star name="star" style={styles.star} />
+                  <Text
+                    style={{
+                      fontFamily: "Roboto",
+                      fontSize: 14,
+                      color: "white",
+                      marginLeft: 3,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {movie.movie_rating}
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          ))
+        ) : (
+          <Text style={styles.loadingText}>Loading...</Text>
+        )}
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    // paddingTop: 50,
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: "#fff",
   },
-  tinyLogo: {
-    width: 50,
-    height: 50,
+
+  moviesContainer: {
+    paddingHorizontal: 16,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+  },
+  movieCard: {
+    width: "48%",
+    marginBottom: 16,
+    overflow: "hidden",
+    padding: 8,
   },
   imgMovie: {
-    width: 100,
-    height: 100,
-    resizeMode: "contain",
+    width: "100%",
+    borderRadius: 5,
+    height: 300,
+    resizeMode: "cover",
+  },
+  overlay: {
+    position: "absolute",
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Làm mờ overlay
+    width: "25%",
+    height: "8%",
+    justifyContent: "center",
+    alignItems: "center", // Căn giữa text
+    top: 250, // Thay thế marginTop
+    left: 145, // Thay thế marginLeft
+    borderBottomLeftRadius: 20,
+  },
+  star: {
+    color: "yellow",
+    fontSize: 10,
+  },
+  movieTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginTop: 8,
+  },
+  loadingText: {
+    textAlign: "center",
+    marginTop: 20,
+    fontSize: 16,
   },
 });
 
